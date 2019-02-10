@@ -1,0 +1,176 @@
+<% include partials/profileHeader %>
+
+<!------ Include the above in your HEAD tag ---------->
+<% include partials/navbar %>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <% include partials/sidebar%>
+
+      <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="/profile">Profile</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="/edit">Edit</a>
+            </li>
+          </ol>
+
+          <!-- Page Content -->
+          <h1>Profile</h1>
+          <hr>
+
+          <!--profile container-->
+        <% profList.forEach(function(prof) 
+        {%>
+        <div class="container emp-profile">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img img-circle round img-rounded" style="border-radius: 50%;">
+                            <img src="../uploads/<%=prof.image%>" alt="" class="round img-circle" style="border-radius: 50%; height: 25%; width: 50%;"/>
+                            <div class="file btn btn-lg btn-primary" >
+                                Change Photo
+                                <input type="file" name="image" required='required'/>
+                            </div>
+                            
+                        </div>
+                        <button class="btn  btn-block btn-primary" type="submit" style="margin-left:15%; width: 70%; background-color: #e76482; border-color: #e76482">Submit</button>                    
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                         <%=prof.firstname%>  <%=prof.lastname%>
+                                    </h5>
+                                    <p class="proile-rating">Complaints : <span><%=total%></span></p>
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="home-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="home" aria-selected="true">About</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " id="profile-tab" data-toggle="tab" href="#home" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+                                        </li>
+                                    </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 d-none d-xl-block ">
+                        <a class="profile-edit-btn" name="btnAddMore" href='/edit' value="Edit Profile">edit</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>First Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.firstname%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Last Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.lastname%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>User Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.userName%></p>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Type</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.type%></p>
+                                            </div>
+                                        </div>
+                            </div>
+                            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="row">
+                                            <div class="col-md-6">
+                                                <label>DOB</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.dob%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Gender</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.gender%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>ID Number</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.roll%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Course Year</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=prof.course%></p>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>           
+        </div>
+        <% }); %>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <% include partials/copyright %>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <% include partials/logout %>
+
+<% include partials/footer %>

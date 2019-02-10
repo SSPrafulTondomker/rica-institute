@@ -1,0 +1,231 @@
+
+<% include partials/header %>
+    <% include partials/navbar %>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <ul class="sidebar navbar-nav active">
+          <li class="nav-item " id="dashboard">
+            <a class="nav-link" href="/">
+              <i class="fas fa-fw fa-tachometer-alt"></i>
+              <span >Dashboard</span>
+            </a>
+          </li>
+          <% if ( type[0].type == 'admin' ) { %>
+             <li class="nav-item dropdown" id="admin">
+            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-fw fa-folder"></i>
+              <span >Admin</span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <h6 class="dropdown-header">Admin Mode:</h6>
+              <a class="dropdown-item" href="/userslist">Userslist</a>
+              <a class="dropdown-item" href="/privilege">Privileges</a>
+              <a class="dropdown-item" href="/generateXlsx">Generate Xlsx</a> 
+            </div>
+          </li>
+          <% } %>
+          <li class="nav-item" id="complaint">
+              <a class="nav-link" href="/complaint">
+                <i class="fas fa-comment-alt"></i>
+                <span >Complaint</span></a>
+          </li>
+          <li class="nav-item " id="profile">
+              <a class="nav-link" href="/profile">
+                <i class="fas fa-address-book"></i>
+                <span >Profile</span></a>
+          </li>
+          <li class="nav-item " id="feedback">
+              <a class="nav-link" href="/feedback">
+                <i class="fas fa-comment"></i>
+                <span >Feed Back</span></a>
+          </li>
+        </ul>
+
+      <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Overview</li>
+          </ol>
+
+          <!-- Icon Cards-->
+          <div class="row">
+            <div class="col-xl-4 col-sm-7 mb-4">
+              <div class="card text-white bg-primary o-hidden h-100">
+                <div class="card-body">
+                  <div class="card-body-icon">
+                    <i class="fas fa-fw fa-comments"></i>
+                  </div>
+                  <div class="mr-5"><%=solved%>  Solved Requests!</div>
+                </div>
+                <a class="card-footer text-white clearfix small z-1" href="#dataTable">
+                  <span class="float-left">View Details</span>
+                  <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="col-xl-4 col-sm-7 mb-4">
+              <div class="card text-white bg-warning o-hidden h-100">
+                <div class="card-body">
+                  <div class="card-body-icon">
+                    <i class="fas fa-fw fa-list"></i>
+                  </div>
+                  <div class="mr-5"><%=unsolved%> Unsolved Requests!</div>
+                </div>
+                <a class="card-footer text-white clearfix small z-1" href="#dataTable">
+                  <span class="float-left">View Details</span>
+                  <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div class="col-xl-4 col-sm-7 mb-4">
+              <div class="card text-white bg-success o-hidden h-100">
+                <div class="card-body">
+                  <div class="card-body-icon">
+                    <i class="fas fa-fw fa-shopping-cart"></i>
+                  </div>
+                  <div class="mr-5"><%=total%> Total</div>
+                </div>
+                <a class="card-footer text-white clearfix small z-1" href="#dataTable">
+                  <span class="float-left">View Details</span>
+                  <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- DataTables Example -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+              list of complaints</div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Request Id</th>
+                      <th>Created At</th>
+                      <th>Username</th>
+                      <th>Type</th>
+                      <th>Subject</th>
+                      <th>Complaint</th>
+                      <th>Status</th>
+                      <% if ( type[0].type == 'admin' ) { %>
+                        <th>Action</th>
+                      <% } %>
+                      <th>Discard</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>Request Id</th>
+                      <th>Created At</th>
+                      <th>Username</th>
+                      <th>Type</th>
+                      <th>Subject</th>
+                      <th>Complaint</th>
+                      <th>Status</th>
+                      <% if ( type[0].type == 'admin' ) { %>
+                        <th>Action</th>
+                      <% } %>
+                      <th>Discard</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                     
+                      <% list.forEach(function(comp) 
+                      {%>
+                    <tr onClick="displayModal(<%=JSON.stringify(comp.userName)%>, <%=JSON.stringify(comp.complaint)%>)" data-toggle="modal" data-target="#displayModal">
+                        
+                        <form id="<%=comp.requestId%>" action="/solveRequest" method="post">
+                    <!-- <form action="/discardRequest" method="POST"> -->
+                      <td type="input" name="requestId">  <input readonly  name="requestId" value="<%=comp.requestId%>" style="border: none;
+                        border-color: transparent;"> </td>
+                      <td > <%=comp.createdAt.getDate()%>/<%=comp.createdAt.getMonth()+1%>/<%=comp.createdAt.getFullYear()%> Time:<%=comp.createdAt.getHours()%>:<%=comp.createdAt.getMinutes()%></td>
+                      <td>  <%=comp.userName%> </td>
+                      <td>  <%=comp.type%> </td>
+                      <td>  <%=comp.subject%> </td>
+                      <td >  <%=comp.complaint%> </td>    
+                      <% if (comp.solved ) { %>
+                        <td>solved</td>
+                      <% } else { %>
+                        <td>unsolved</td>
+                      <% } %>
+                      <% if ( type[0].type == 'admin' ) { %>
+                        <td><button class="btn" type="submit" form="<%=comp.requestId%>"><i class="fas fa-check"></i> solve</button></td>
+                      <% } %>
+                    </form> 
+                      <td>
+                        <form action="/discardRequest" method="POST" id="s<%=comp.requestId%>">
+                          <button class="btn" type="submit" form="s<%=comp.requestId%>" ><i class="fas fa-trash"></i></button>
+                        <input name="comparator" value="<%=comp.requestId%>" style="border: none;
+                          border-color: transparent; visibility: hidden">
+                        </form>  
+                    </td>
+                    <!-- </form> -->
+                  
+                   
+                    </tr>
+                    <% }); %>
+                  
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- modal -->
+        <div class="modal fade" id="displayModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="username2">" "</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <p class="modal-body" ><span id="username">sd</span></p>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal ends -->
+
+        <!-- Sticky Footer -->
+        <% include partials/copyright %>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <% include partials/logout %>
+
+<% include partials/footer %>
