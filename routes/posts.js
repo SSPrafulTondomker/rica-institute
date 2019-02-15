@@ -276,15 +276,25 @@ router.post( '/grantAccess',(req, res) => {
         }
         else{
             console.log("Editing  Successful!!!");
-            complaintList.updateMany({userName: username},
-                {
-                    type: type
-                }
-                ,{upsert: true}, function(err, newlist){
+            complaintList.find ({userName: username}, function(err, newlist){
                     if(err){
                         console.log("error in editing profile");
                     }
+                    else {
+                        if (newlist.length != 0 ) {
+                            complaintList.updateMany({userName: username},
+                                {
+                                    type: type
+                                }
+                                ,{upsert: true}, function(err, newlist){
+                                    if(err){
+                                        console.log("error in editing profile");
+                                    }
+                            });
+                        }
+                    }
             });
+            
             profileList.findOneAndUpdate({userName: username},
                 {
                     type: type
