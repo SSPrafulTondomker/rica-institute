@@ -341,12 +341,14 @@ router.post('/upload',loggedin, upload.any(), function (req, res, next) {
 });
 
 router.post('/generateXlsx', function(req, res){
-    var dt = req.body.date+"T06:01:17.171Z",
+    var sdt = req.body.startDate+"T06:01:17.171Z",
+        edt = req.body.endDate+"T06:01:17.171Z",
         mail = req.body.mail;
         var path = [];
-        console.log(dt);
+        console.log(sdt);
+        console.log(edt);
 
-    complaintList.find({ createdAt: { $gte: dt } }, function(err, dat){
+    complaintList.find({ createdAt: { $gte: sdt, $lte: edt } }, function(err, dat){
         var data = [];
         console.log(dat);
         dat.forEach(function(d){
